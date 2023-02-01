@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="bankapp.css" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet" />
+    <script src="bankapp.js" defer></script>
+    <title>Bank App</title>
+  </head>
+  <body>
+    <!-- TOP NAVIGATION -->
+    <nav>
+      <p class="welcome">Log in to get started</p>
+      <div class="nav-middle">
+        <img src="banklogo.png" class="logo" alt="Bank Logo" />
+        <button class="create-account">Create Account</button>
+      </div>
+      <form>
+        <div class="login">
+          <input class="user__input login__input--user" type="text" placeholder="user" />
+          <input class="user__input login__input--pin" type="password" placeholder="PIN" maxlength="4" />
+          <button class="login__btn">&rarr;</button>
+        </div>
+      </form>
+    </nav>
+
+    <div class="app-container hide">
+      <section class="app">
+        <section class="app-header">
+          <div>
+            <p class="current-balance-text">Currrent Balance</p>
+            <p class="date">As of 1/12/23</p>
+          </div>
+          <div class="balance">$0000</div>
+        </section>
+
+        <section class="app-main">
+          <div class="app-main-left">
+            <div class="movements">
+              <div class="movement-row"></div>
+            </div>
+            <div class="summary">
+              <div class="summary-in-out">
+                <div class="summary-in-out-text">IN: <span class="summary-in-out-amount-in"></span></div>
+                <div class="summary-in-out-text">OUT: <span class="summary-in-out-amount-out"></span></div>
+              </div>
+              <button class="btn-sort">&downarrow; SORT</button>
+            </div>
+          </div>
+          <div class="app-main-right">
+            <div class="operation operation-transfer">
+              <h2>Transfer Money</h2>
+              <form class="operation-input-div">
+                <select class="operation-input transfer-account-name" name="account-names">
+                  <option value="Choose an Account">Choose an Account</option>
+                </select>
+                <input class="operation-input operation-input-number transfer-amount" type="number" />
+                <button class="transfer-btn operation-btn">&rarr;</button>
+                <label class="operation-label">Transfer To</label>
+                <label class="operation-label">Amount</label>
+              </form>
+            </div>
+            <div class="operation operation-loan">
+              <h2>Request Loan</h2>
+              <form class="operation-input-div">
+                </select>
+                <input class="operation-input operation-input-number request-amount" type="number" />
+                <button class="request-btn transfer-btn operation-btn">&rarr;</button>
+                <label class="operation-label">Amount</label>
+              </form>
+            </div>
+            <div class="operation operation-close">
+              <h2>Close Account</h2>
+              <form class="operation-input-div">
+                <input class="close-username operation-input operation-input-number" type="text">
+                <input class="close-pin operation-input operation-input-number" type="password" maxlength="4"/>
+                <button class="close-btn operation-btn">&rarr;</button>
+                <label class="operation-label">Confirm Username</label>
+                <label class="operation-label">Confirm PIN</label>
+              </form>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </body>
+</html>
