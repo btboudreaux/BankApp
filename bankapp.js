@@ -397,7 +397,6 @@ function requestLoan() {
     displayUpdateAll(currentAccount.movements);
   }
   requestAmount.value = "";
-  console.log(currentAccount);
 }
 
 function closeAccount() {
