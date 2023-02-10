@@ -1,17 +1,36 @@
 "use strict";
 
 //Data
+
 const account1 = {
   owner: "Jonas Smith",
-  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
-  interestRate: 1.2, // %
+  movements: [
+    { amount: 200, date: "1/2/2021" },
+    { amount: 450, date: "3/6/2021" },
+    { amount: -400, date: "8/20/21" },
+    { amount: 3000, date: "1/7/22" },
+    { amount: -650, date: "4/9/22" },
+    { amount: -130, date: "7/12/22" },
+    { amount: 70, date: "12/7/22" },
+    { amount: 1300, date: "2/5/23" },
+  ],
+  interestRate: 1.2,
   pin: "1111",
   username: "jsmith",
 };
 
 const account2 = {
   owner: "Jessica Davis",
-  movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+  movements: [
+    { amount: 5000, date: "1/2/2021" },
+    { amount: 3400, date: "3/6/2021" },
+    { amount: -150, date: "8/20/21" },
+    { amount: -790, date: "1/7/22" },
+    { amount: -3210, date: "4/9/22" },
+    { amount: -1000, date: "7/12/22" },
+    { amount: 8500, date: "12/7/22" },
+    { amount: -30, date: "2/5/23" },
+  ],
   interestRate: 1.5,
   pin: "2222",
   username: "jdavis",
@@ -19,7 +38,16 @@ const account2 = {
 
 const account3 = {
   owner: "Steven Williams",
-  movements: [200, -200, 340, -300, -20, 50, 400, -460],
+  movements: [
+    { amount: 200, date: "1/2/2021" },
+    { amount: -200, date: "3/6/2021" },
+    { amount: 340, date: "8/20/21" },
+    { amount: -300, date: "1/7/22" },
+    { amount: -20, date: "4/9/22" },
+    { amount: 50, date: "7/12/22" },
+    { amount: 400, date: "12/7/22" },
+    { amount: -460, date: "2/5/23" },
+  ],
   interestRate: 0.7,
   pin: "3333",
   username: "swilliams",
@@ -27,7 +55,13 @@ const account3 = {
 
 const account4 = {
   owner: "Sarah Smith",
-  movements: [430, 1000, 700, 50, 90],
+  movements: [
+    { amount: 430, date: "1/2/2021" },
+    { amount: 1000, date: "3/6/2021" },
+    { amount: 700, date: "8/20/21" },
+    { amount: 50, date: "1/7/22" },
+    { amount: 90, date: "4/9/22" },
+  ],
   interestRate: 1,
   pin: "4444",
   username: "ssmith",
@@ -167,7 +201,7 @@ function createAccountUIInfo(account) {
                                         Username: <span class="red">${account.username}</span><br>
                                         PIN: <span class="red">${account.pin}</span><br>
                                         Interest Rate: <span class="red">${account.interestRate}</span><br>
-                                        Balance: <span class="red">$${account.movements}</span></div>`;
+                                        Balance: <span class="red">$${account.movements[0].amount}</span></div>`;
 }
 
 function createAccountUICheckInputs(firstNameValid, lastNameValid, usernameValid, pinValid, startBalValid) {
@@ -223,30 +257,29 @@ function displayMovements(movements, sort = "default") {
     sort === "default"
       ? movements
       : sort === "ascending"
-      ? movements.slice().sort((a, b) => a - b)
-      : movements.slice().sort((a, b) => b - a);
+      ? movements.slice().sort((a, b) => a.amount - b.amount)
+      : movements.slice().sort((a, b) => b.amount - a.amount);
   movementsEl.innerHTML = "";
   movs.forEach(mov => {
-    const movementType = mov > 0 ? "deposit" : "withdrawl";
+    const movementType = mov.amount > 0 ? "deposit" : "withdrawl";
     const html = `<div class="movement-row">
     <div class="movement-type movement-type__${movementType}">${movementType}</div>
-    <div class="movement-date">1/19/23</div>
-    <div class="movement-date"></div>
-    <div class="movement-value">$${mov}</div>`;
+    <div class="movement-date">${mov.date}</div>
+    <div class="movement-value">$${mov.amount}</div>`;
     movementsEl.insertAdjacentHTML("afterbegin", html);
   });
 }
 
 function displayBalance(movements) {
-  const balance = movements.reduce((sum, movement) => sum + movement, 0);
+  const balance = movements.reduce((sum, movement) => sum + movement.amount, 0);
   balanceEl.innerText = `$${balance}`;
   return balance;
 }
 
 function displaySummary(movements) {
-  summaryInEl.innerText = `$${movements.filter(mov => mov > 0).reduce((sum, mov) => sum + mov, 0)}`;
+  summaryInEl.innerText = `$${movements.filter(mov => mov.amount > 0).reduce((sum, mov) => sum + mov.amount, 0)}`;
   summaryInOut.innerText = `$${Math.abs(
-    movements.filter(mov => mov < 0).reduce((sum, mov) => sum + mov, 0),
+    movements.filter(mov => mov.amount < 0).reduce((sum, mov) => sum + mov.amount, 0),
     0
   )}`;
 }
@@ -312,6 +345,14 @@ function sortAccounts() {
   });
 }
 
+function getDate() {
+  const todaysDate = new Date();
+  const displayDate = `${todaysDate.getMonth() + 1}/${todaysDate.getDate()}/${String(todaysDate.getFullYear()).slice(
+    2
+  )}`;
+  return displayDate;
+}
+
 function createAccount() {
   const firstName = (createAccountDisplayFirstName.value = createAccountDisplayFirstName.value.trim());
   const lastName = (createAccountDisplayLastName.value = createAccountDisplayLastName.value.trim());
@@ -327,7 +368,7 @@ function createAccount() {
   if (createAccountUICheckInputs(firstNameValid, lastNameValid, usernameValid, pinValid, startBalValid)) {
     accounts.push({
       owner: `${firstName} ${lastName}`,
-      movements: [startBal],
+      movements: [{ amount: startBal, date: getDate() }],
       interestRate: 1.2,
       pin: pin,
       username: username,
@@ -342,8 +383,8 @@ function transferFunds() {
   const transferNum = Number(transferAmount.value);
   const receiveAccount = accounts.find(account => account.username === transferAccountOwner.value);
   if (transferNum > 0 && transferNum <= displayBalance(currentAccount.movements)) {
-    receiveAccount.movements.push(transferNum);
-    currentAccount.movements.push(-transferNum);
+    receiveAccount.movements.push({ amount: transferNum, date: getDate() });
+    currentAccount.movements.push({ amount: -transferNum, date: getDate() });
     displayUpdateAll(currentAccount.movements);
   }
   transferAmount.value = "";
@@ -353,10 +394,11 @@ function requestLoan() {
   const requestAmount = document.querySelector(".request-amount");
   const requestNum = Number(requestAmount.value);
   if (requestNum > 0) {
-    currentAccount.movements.push(requestNum);
+    currentAccount.movements.push({ amount: requestNum, date: getDate() });
     displayUpdateAll(currentAccount.movements);
   }
   requestAmount.value = "";
+  console.log(currentAccount);
 }
 
 function closeAccount() {
@@ -402,8 +444,3 @@ signOutBtn.addEventListener("click", function (e) {
   e.preventDefault();
   signOut();
 });
-//Testing
-// console.log(accounts);
-
-// const html = `<div>Testing</div>`;
-//createAccountUIDisplay.insertAdjacentHTML("afterbegin", html);
