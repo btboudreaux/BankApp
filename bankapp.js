@@ -311,7 +311,6 @@ function loginAccountUI() {
 }
 
 function transferDropDown() {
-  // transferAccountOwner.innerHTML = '<option value="Choose an Account">Choose an Account</option>';
   accounts.forEach(account => {
     if (currentAccount.owner != account.owner) {
       const transferOption = document.createElement("option");
